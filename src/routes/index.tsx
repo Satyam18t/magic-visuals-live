@@ -44,9 +44,10 @@ function Index() {
         document.head.appendChild(s);
       });
 
+    // QR library loads in parallel — it is only needed when a card renders.
+    void loadQr();
+
     (async () => {
-      await loadQr();
-      if (cancelled) return;
       const { initHHGoa } = await import("@/lib/hhgoa/app");
       if (cancelled) return;
       initHHGoa();
