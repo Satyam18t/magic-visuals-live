@@ -132,13 +132,110 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+/* ===== HH Goa 2026 brand layer ===== */
+:root {
+  --goa-900: oklch(0.26 0.06 158);
+  --goa-800: oklch(0.36 0.09 158);
+  --goa-700: oklch(0.44 0.11 156);
+  --goa-600: oklch(0.5 0.12 155);
+  --goa-500: oklch(0.6 0.14 152);
+  --sun: oklch(0.89 0.16 92);
+  --sun-soft: oklch(0.93 0.1 96);
+  --cream: oklch(0.98 0.02 85);
+  --coral: oklch(0.68 0.15 45);
+  --hairline: oklch(0.98 0.02 85 / 16%);
+  --shadow-glow: 0 14px 44px oklch(0.89 0.16 92 / 30%);
+}
+
+@theme inline {
+  --color-goa-900: var(--goa-900);
+  --color-goa-800: var(--goa-800);
+  --color-goa-700: var(--goa-700);
+  --color-goa-600: var(--goa-600);
+  --color-goa-500: var(--goa-500);
+  --color-sun: var(--sun);
+  --color-sun-soft: var(--sun-soft);
+  --color-cream: var(--cream);
+  --color-coral: var(--coral);
+  --color-hairline: var(--hairline);
+  --font-display: "Anton", sans-serif;
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@keyframes palmSway {
+  0%,
+  100% {
+    transform: rotate(-1.4deg);
+  }
+  50% {
+    transform: rotate(1.6deg);
+  }
+}
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: rotate(-8deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-5deg) translateY(-6px);
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@utility grain {
+  background-image: radial-gradient(oklch(0.98 0.02 85 / 7%) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.5;
+}
+
+@utility rise {
+  animation: riseIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@utility text-shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--cream) 20%,
+    var(--sun) 45%,
+    var(--cream) 70%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    background-color: var(--goa-700);
+    color: var(--cream);
+    font-family: var(--font-sans);
   }
 }
+
