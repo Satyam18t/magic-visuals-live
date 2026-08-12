@@ -675,10 +675,18 @@ function sunWaveFooter(cx, cy, w){
   ctx.restore();
 }
 let qrCanvas=null;
-try{
-  new QRCode(document.getElementById('qrHidden'), {text:'https://hhgoa.com', width:160, height:160, colorDark:'#0E3B2E', colorLight:'#F5EEDA', correctLevel: QRCode.CorrectLevel.M});
-  setTimeout(()=>{ qrCanvas=document.querySelector('#qrHidden canvas'); }, 200);
-}catch(e){}
+// The QR library loads from a CDN in parallel with boot, so poll until it lands.
+(function buildQR(tries){
+  const QR=(window as any).QRCode;
+  if(!QR){ if(tries>0) setTimeout(()=>buildQR(tries-1), 250); return; }
+  try{
+    const host=document.getElementById('qrHidden');
+    if(!host) return;
+    host.innerHTML='';
+    new QR(host, {text:'https://hhgoa.com', width:160, height:160, colorDark:'#0E3B2E', colorLight:'#F5EEDA', correctLevel: QR.CorrectLevel.M});
+    setTimeout(()=>{ qrCanvas=host.querySelector('canvas')||host.querySelector('img'); }, 200);
+  }catch(e){}
+})(40);
 
 /* ---- ornament wallpaper for the boarding-pass card ---- */
 function cardWallpaper(bx,by,bw,bh,color){
