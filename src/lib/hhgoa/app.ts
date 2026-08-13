@@ -974,18 +974,18 @@ function drawSingleCard(){
   ctx.font='700 20px "JetBrains Mono"'; ctx.fillStyle=GOA.pink;
   ctx.fillText(STATE.card.id, colX[2]+colW/2, colTop+170);
   ctx.textAlign='left';
-  drawBarcode(colX[2]+8, colTop+184, colW-16, 30, GOA.deep, STATE.card.setNo*7919);
+  drawBarcode(colX[2]+8, colTop+182, colW-16, 26, GOA.deep, STATE.card.setNo*7919);
 
   /* ---- footer: sea + ribbon ---- */
-  const seaY=by+bh-78;
+  const seaY=by+bh-56;
   ctx.fillStyle=GOA.green;
   ctx.beginPath(); ctx.moveTo(bx,seaY+8);
   ctx.quadraticCurveTo(bx+bw*0.25,seaY-6,bx+bw*0.5,seaY+4);
   ctx.quadraticCurveTo(bx+bw*0.78,seaY+16,bx+bw,seaY+2);
   ctx.lineTo(bx+bw,by+bh); ctx.lineTo(bx,by+bh); ctx.closePath(); ctx.fill();
-  goaWaveLines(bx+40, seaY+44, bw-80, 2, hexA(GOA.cream,0.5), 0.5);
-  palmSilhouette(bx+70, seaY+14, 0.6, hexA(GOA.cream,0.35));
-  palmSilhouette(bx+bw-70, seaY+14, 0.6, hexA(GOA.cream,0.35));
+  goaWaveLines(bx+40, seaY+30, bw-80, 2, hexA(GOA.cream,0.5), 0.5);
+  palmSilhouette(bx+70, seaY+10, 0.5, hexA(GOA.cream,0.35));
+  palmSilhouette(bx+bw-70, seaY+10, 0.5, hexA(GOA.cream,0.35));
   ctx.restore();
   drawRibbon(W/2, H-92, '#FRAMEINGOA', GOA.pink, GOA.cream);
 }
