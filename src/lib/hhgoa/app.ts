@@ -394,6 +394,8 @@ document.querySelectorAll('#screen-single [data-next]').forEach(btn=>{
       STATE.single.role=document.getElementById('s-role').value.trim();
       STATE.single.company=document.getElementById('s-company').value.trim();
       STATE.single.location=document.getElementById('s-location').value.trim();
+      STATE.single.building=document.getElementById('s-building').value.trim();
+
       const err=document.getElementById('err-s-stack');
       if(STATE.single.stacks.length===0){ err.classList.add('show'); return; } else err.classList.remove('show');
     }
