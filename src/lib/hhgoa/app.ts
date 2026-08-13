@@ -160,6 +160,8 @@ const AmbientBG = (function(){
   const canvas=document.getElementById('ambientBG');
   const actx=canvas.getContext('2d');
   let w,h,dpr=Math.min(devicePixelRatio||1,2), motes=[], glows=[], t=0, raf=null;
+  /* intensity: 1 = hero-adjacent, 0.55 = forms, 0.3 = result (calmest) */
+  let intensity=1;
   function resize(){
     w=innerWidth; h=innerHeight;
     canvas.width=w*dpr; canvas.height=h*dpr;
@@ -173,22 +175,29 @@ const AmbientBG = (function(){
     t+=1;
     actx.clearRect(0,0,w,h);
     glows.forEach(g=>{
-      const gx=g.x+Math.sin(t*g.speed+g.phase)*40, gy=g.y+Math.cos(t*g.speed*0.8+g.phase)*30;
+      const gx=g.x+Math.sin(t*g.speed+g.phase)*40*intensity, gy=g.y+Math.cos(t*g.speed*0.8+g.phase)*30*intensity;
       const grad=actx.createRadialGradient(gx,gy,0,gx,gy,g.r);
-      grad.addColorStop(0,'rgba(255,210,63,0.05)'); grad.addColorStop(1,'rgba(255,210,63,0)');
+      grad.addColorStop(0,`rgba(255,210,63,${0.05*intensity})`); grad.addColorStop(1,'rgba(255,210,63,0)');
       actx.fillStyle=grad; actx.beginPath(); actx.arc(gx,gy,g.r,0,Math.PI*2); actx.fill();
     });
     motes.forEach(m=>{
-      m.y-=m.vy; m.x+=m.vx;
+      m.y-=m.vy*intensity; m.x+=m.vx*intensity;
       if(m.y<-4) m.y=h+4; if(m.x<-4) m.x=w+4; if(m.x>w+4) m.x=-4;
-      actx.beginPath(); actx.fillStyle=`rgba(255,247,234,${m.a})`;
+      actx.beginPath(); actx.fillStyle=`rgba(255,247,234,${m.a*intensity})`;
       actx.arc(m.x,m.y,m.r,0,Math.PI*2); actx.fill();
     });
     raf=requestAnimationFrame(frame);
   }
-  return { start(){ resize(); if(!reduceMotion) frame(); else { actx.clearRect(0,0,w,h); } } };
+  return {
+    start(){ resize(); if(!reduceMotion) frame(); else { actx.clearRect(0,0,w,h); } },
+    setIntensity(v){ intensity=v; },
+    pause(){ if(raf){ cancelAnimationFrame(raf); raf=null; } },
+    resume(){ if(!raf && !reduceMotion) frame(); }
+  };
 })();
 AmbientBG.start();
+document.addEventListener('visibilitychange', ()=>{ document.hidden ? AmbientBG.pause() : AmbientBG.resume(); });
+
 
 /* =========================================================================
    DATA — stacks / tiers / flavor text
