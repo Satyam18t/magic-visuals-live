@@ -136,6 +136,8 @@ export const HHGOA_MARKUP = `<canvas id="ambientBG" aria-hidden="true"></canvas>
         <div class="field"><label>Company <span class="opt">(optional)</span></label><input type="text" id="s-company" placeholder="e.g. Indie"></div>
       </div>
       <div class="field"><label>City / Country</label><input type="text" id="s-location" placeholder="e.g. Bengaluru, India"></div>
+      <div class="field"><label>Currently shipping <span class="opt">(optional · shows on your pass)</span></label><input type="text" id="s-building" placeholder="e.g. An AI trip planner for Goa" maxlength="60"></div>
+
       <div class="field">
         <label>Stack / Skills <span class="opt">(pick up to 2)</span></label>
         <div class="chips" id="s-stackChips"></div>
