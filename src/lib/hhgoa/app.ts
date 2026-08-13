@@ -843,11 +843,11 @@ function drawSingleCard(){
   star(bx+bw*0.26, by+196, 7, GOA.yellow, 0.95);
 
   /* ---- lanyard plaque ---- */
-  roundRectPath(W/2-96, 6, 192, 96, 18); ctx.fillStyle=GOA.pink; ctx.fill();
-  ctx.lineWidth=3.4; ctx.strokeStyle=GOA.deep; roundRectPath(W/2-96, 6, 192, 96, 18); ctx.stroke();
+  roundRectPath(W/2-96, 20, 192, 92, 18); ctx.fillStyle=GOA.pink; ctx.fill();
+  ctx.lineWidth=3.4; ctx.strokeStyle=GOA.deep; roundRectPath(W/2-96, 20, 192, 92, 18); ctx.stroke();
   ctx.textAlign='center';
-  ctx.font='400 36px "Anton"'; ctx.fillStyle=GOA.yellow; ctx.fillText('HH GOA', W/2, 56);
-  ctx.font='700 15px "JetBrains Mono"'; ctx.fillStyle=GOA.cream; ctx.fillText('2026', W/2, 82);
+  ctx.font='400 36px "Anton"'; ctx.fillStyle=GOA.yellow; ctx.fillText('HH GOA', W/2, 70);
+  ctx.font='700 15px "JetBrains Mono"'; ctx.fillStyle=GOA.cream; ctx.fillText('2026', W/2, 96);
   ctx.textAlign='left';
 
   /* ---- headline: HACKER [GOA] HOUSE ---- */
@@ -875,9 +875,9 @@ function drawSingleCard(){
   goaSurfboard(bx+150, by+bh*0.52, 220, -0.12, GOA.yellow, GOA.deep);
   palmSilhouette(bx+108, by+bh*0.62, 1.25, hexA(GOA.leaf,0.9));
   goaLeaf(bx+40, by+bh*0.40, 1, 0.5, hexA(GOA.leaf,0.5));
-  goaShack(bx+bw-116, by+bh*0.62, 0.95);
-  goaScooter(bx+bw-158, by+bh*0.695, 0.9);
-  palmSilhouette(bx+bw-52, by+bh*0.58, 1.1, hexA(GOA.leaf,0.85));
+  goaShack(bx+bw-104, by+bh*0.50, 0.9);
+  goaScooter(bx+bw-176, by+bh*0.545, 0.85);
+  palmSilhouette(bx+bw-50, by+bh*0.56, 1.05, hexA(GOA.leaf,0.85));
   goaLeaf(bx+bw-36, by+bh*0.34, 1.1, Math.PI-0.5, hexA(GOA.leaf,0.5));
 
   /* ---- photo: arch-top frame with braided ring ---- */
@@ -894,9 +894,11 @@ function drawSingleCard(){
   stickyNote(mcx+mr+66, mcy-mr*0.66, 128, 84, 0.16, "LET'S\nBUILD!");
   /* tier chip on the other side */
   ctx.save(); ctx.translate(mcx-mr-84, mcy+mr*0.92); ctx.rotate(-0.14);
-  roundRectPath(-70,-26,140,52,12); ctx.fillStyle=GOA.green; ctx.fill();
-  ctx.lineWidth=3; ctx.strokeStyle=GOA.deep; roundRectPath(-70,-26,140,52,12); ctx.stroke();
-  ctx.textAlign='center'; ctx.font='400 24px "Anton"'; ctx.fillStyle=GOA.yellow;
+  ctx.font='400 24px "Anton"';
+  const chw=Math.max(140, ctx.measureText(r.key.toUpperCase()).width+40);
+  roundRectPath(-chw/2,-26,chw,52,12); ctx.fillStyle=GOA.green; ctx.fill();
+  ctx.lineWidth=3; ctx.strokeStyle=GOA.deep; roundRectPath(-chw/2,-26,chw,52,12); ctx.stroke();
+  ctx.textAlign='center'; ctx.fillStyle=GOA.yellow;
   ctx.fillText(r.key.toUpperCase(), 0, 9); ctx.textAlign='left'; ctx.restore();
 
   /* ---- name plaque ---- */
@@ -922,7 +924,7 @@ function drawSingleCard(){
   ctx.textAlign='left';
 
   /* ---- three-column credential block ---- */
-  const colTop=rpY+92, padX=bx+56, contentW=bw-112, colW=(contentW-56)/3;
+  const colTop=rpY+108, padX=bx+56, contentW=bw-112, colW=(contentW-56)/3;
   const colX=[padX, padX+colW+28, padX+(colW+28)*2];
   ctx.setLineDash([4,6]); ctx.lineWidth=1.6; ctx.strokeStyle=hexA(GOA.pink,0.5);
   [1,2].forEach(i=>{ ctx.beginPath(); ctx.moveTo(colX[i]-14, colTop-14); ctx.lineTo(colX[i]-14, colTop+236); ctx.stroke(); });
@@ -977,7 +979,7 @@ function drawSingleCard(){
   drawBarcode(colX[2]+8, colTop+182, colW-16, 26, GOA.deep, STATE.card.setNo*7919);
 
   /* ---- footer: sea + ribbon ---- */
-  const seaY=by+bh-84;
+  const seaY=by+bh-96;
   ctx.fillStyle=GOA.green;
   ctx.beginPath(); ctx.moveTo(bx,seaY+8);
   ctx.quadraticCurveTo(bx+bw*0.25,seaY-6,bx+bw*0.5,seaY+4);
