@@ -237,7 +237,7 @@ function pickN(arr,n){ const pool=[...arr]; const out=[]; while(out.length<n && 
    ========================================================================= */
 const STATE = {
   generatorType:null,
-  single:{ name:'', email:'', phone:'', role:'', company:'', location:'', linkedin:'', github:'', instagram:'', twitter:'', portfolio:'', stacks:[], photo:null },
+  single:{ name:'', email:'', phone:'', role:'', building:'', company:'', location:'', linkedin:'', github:'', instagram:'', twitter:'', portfolio:'', stacks:[], photo:null },
   squad:{ name:'', tagline:'', members:[] },
   card:{ tier:TIERS[2], abilityName:'', abilityText:'', toolkit:[], id:'', setNo:Math.floor(Math.random()*498)+1 }
 };
@@ -513,7 +513,7 @@ function rollCardFlavor(){
 function runGeneration(type){
   lastGenerated=type;
   rollCardFlavor();
-  STATE.card.id = type==='single' ? 'HHG-26-'+uid(6) : 'HHG-SQ-'+uid(4);
+  STATE.card.id = type==='single' ? '#HH-GOA-'+String(Math.floor(1000+Math.random()*9000)) : '#HH-SQ-'+String(Math.floor(1000+Math.random()*9000));
   const overlay=document.getElementById('genOverlay');
   document.getElementById('genWord').textContent = 'Building your ID...';
   overlay.classList.add('show');
