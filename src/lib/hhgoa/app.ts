@@ -876,12 +876,12 @@ function drawSingleCard(){
   palmSilhouette(bx+108, by+bh*0.62, 1.25, hexA(GOA.leaf,0.9));
   goaLeaf(bx+40, by+bh*0.40, 1, 0.5, hexA(GOA.leaf,0.5));
   goaShack(bx+bw-116, by+bh*0.62, 0.95);
-  goaScooter(bx+bw-108, by+bh*0.66, 0.95);
+  goaScooter(bx+bw-158, by+bh*0.695, 0.9);
   palmSilhouette(bx+bw-52, by+bh*0.58, 1.1, hexA(GOA.leaf,0.85));
   goaLeaf(bx+bw-36, by+bh*0.34, 1.1, Math.PI-0.5, hexA(GOA.leaf,0.5));
 
   /* ---- photo: arch-top frame with braided ring ---- */
-  const mcx=W/2, mcy=by+600, mr=186;
+  const mcx=W/2, mcy=by+585, mr=172;
   zigzagRing(mcx,mcy,mr+8,mr+26,44,GOA.yellow);
   ctx.beginPath(); ctx.arc(mcx,mcy,mr+8,0,Math.PI*2); ctx.strokeStyle=GOA.pink; ctx.lineWidth=5; ctx.stroke();
   ctx.save(); ctx.beginPath(); ctx.arc(mcx,mcy,mr,0,Math.PI*2); ctx.clip();
@@ -891,16 +891,16 @@ function drawSingleCard(){
   ctx.restore();
   ctx.beginPath(); ctx.arc(mcx,mcy,mr,0,Math.PI*2); ctx.strokeStyle=GOA.deep; ctx.lineWidth=4; ctx.stroke();
   /* let's build sticky note tucked beside the portrait */
-  stickyNote(mcx+mr+62, mcy-mr*0.62, 128, 84, 0.16, "LET'S\nBUILD!");
+  stickyNote(mcx+mr+66, mcy-mr*0.66, 128, 84, 0.16, "LET'S\nBUILD!");
   /* tier chip on the other side */
-  ctx.save(); ctx.translate(mcx-mr-64, mcy+mr*0.34); ctx.rotate(-0.14);
+  ctx.save(); ctx.translate(mcx-mr-72, mcy+mr*0.66); ctx.rotate(-0.14);
   roundRectPath(-70,-26,140,52,12); ctx.fillStyle=GOA.green; ctx.fill();
   ctx.lineWidth=3; ctx.strokeStyle=GOA.deep; roundRectPath(-70,-26,140,52,12); ctx.stroke();
   ctx.textAlign='center'; ctx.font='400 24px "Anton"'; ctx.fillStyle=GOA.yellow;
   ctx.fillText(r.key.toUpperCase(), 0, 9); ctx.textAlign='left'; ctx.restore();
 
   /* ---- name plaque ---- */
-  const nameY=mcy+mr+94;
+  const nameY=mcy+mr+84;
   roundRectPath(bx+90, nameY-52, bw-180, 92, 20); ctx.fillStyle=GOA.green; ctx.fill();
   ctx.lineWidth=3.6; ctx.strokeStyle=GOA.deep; roundRectPath(bx+90, nameY-52, bw-180, 92, 20); ctx.stroke();
   ctx.textAlign='center';
@@ -913,7 +913,7 @@ function drawSingleCard(){
   /* ---- role pill ---- */
   const roleText = (s.role || (s.stacks[0]||'Builder')).toUpperCase();
   ctx.font='800 17px "JetBrains Mono"';
-  const rpw=Math.min(bw-220, ctx.measureText(roleText).width+96), rpY=nameY+58;
+  const rpw=Math.min(bw-220, ctx.measureText(roleText).width+96), rpY=nameY+50;
   roundRectPath(W/2-rpw/2, rpY, rpw, 52, 26); ctx.fillStyle=GOA.yellow; ctx.fill();
   ctx.lineWidth=3; ctx.strokeStyle=GOA.deep; roundRectPath(W/2-rpw/2, rpY, rpw, 52, 26); ctx.stroke();
   ctx.fillStyle=GOA.pink; ctx.fillText(roleText, W/2, rpY+34);
@@ -922,7 +922,7 @@ function drawSingleCard(){
   ctx.textAlign='left';
 
   /* ---- three-column credential block ---- */
-  const colTop=rpY+96, padX=bx+56, contentW=bw-112, colW=(contentW-56)/3;
+  const colTop=rpY+86, padX=bx+56, contentW=bw-112, colW=(contentW-56)/3;
   const colX=[padX, padX+colW+28, padX+(colW+28)*2];
   ctx.setLineDash([4,6]); ctx.lineWidth=1.6; ctx.strokeStyle=hexA(GOA.pink,0.5);
   [1,2].forEach(i=>{ ctx.beginPath(); ctx.moveTo(colX[i]-14, colTop-14); ctx.lineTo(colX[i]-14, colTop+250); ctx.stroke(); });
