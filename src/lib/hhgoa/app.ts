@@ -38,6 +38,9 @@ function showScreen(name, push){
   window.scrollTo({top:0,behavior:'instant'});
   document.getElementById('topnav').classList.toggle('show', name!=='landing' || splashDone);
   if(name==='landing') startHeroBG(); else stopHeroBG();
+  /* live background intensity per page: hero strongest → result calmest */
+  try{ AmbientBG.setIntensity(name==='landing' ? 1 : name==='result' ? 0.3 : 0.55); }catch(e){}
+
   if(push!==false) history.pushState({screen:name}, '', '#'+name);
 }
 addEventListener('popstate', (e)=>{
