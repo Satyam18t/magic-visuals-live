@@ -893,7 +893,7 @@ function drawSingleCard(){
   /* let's build sticky note tucked beside the portrait */
   stickyNote(mcx+mr+66, mcy-mr*0.66, 128, 84, 0.16, "LET'S\nBUILD!");
   /* tier chip on the other side */
-  ctx.save(); ctx.translate(mcx-mr-72, mcy+mr*0.66); ctx.rotate(-0.14);
+  ctx.save(); ctx.translate(mcx-mr-84, mcy+mr*0.92); ctx.rotate(-0.14);
   roundRectPath(-70,-26,140,52,12); ctx.fillStyle=GOA.green; ctx.fill();
   ctx.lineWidth=3; ctx.strokeStyle=GOA.deep; roundRectPath(-70,-26,140,52,12); ctx.stroke();
   ctx.textAlign='center'; ctx.font='400 24px "Anton"'; ctx.fillStyle=GOA.yellow;
@@ -925,7 +925,7 @@ function drawSingleCard(){
   const colTop=rpY+86, padX=bx+56, contentW=bw-112, colW=(contentW-56)/3;
   const colX=[padX, padX+colW+28, padX+(colW+28)*2];
   ctx.setLineDash([4,6]); ctx.lineWidth=1.6; ctx.strokeStyle=hexA(GOA.pink,0.5);
-  [1,2].forEach(i=>{ ctx.beginPath(); ctx.moveTo(colX[i]-14, colTop-14); ctx.lineTo(colX[i]-14, colTop+250); ctx.stroke(); });
+  [1,2].forEach(i=>{ ctx.beginPath(); ctx.moveTo(colX[i]-14, colTop-14); ctx.lineTo(colX[i]-14, colTop+236); ctx.stroke(); });
   ctx.setLineDash([]);
   const colHead=(x,label)=>{
     ctx.textAlign='center'; ctx.font='800 13px "JetBrains Mono"'; ctx.fillStyle=GOA.deep;
@@ -959,7 +959,7 @@ function drawSingleCard(){
     while(ctx.measureText(lbl).width>colW-64 && lbl.length>4) lbl=lbl.slice(0,-1);
     ctx.fillText(lbl, colX[1]+58, iy+2);
   });
-  goaWaveLines(colX[1]+6, colTop+228, colW-12, 2, GOA.pink, 0.45);
+  goaWaveLines(colX[1]+6, colTop+220, colW-12, 2, GOA.pink, 0.45);
   /* col 3 — currently shipping + builder ID + barcode */
   colHead(colX[2], 'CURRENTLY SHIPPING');
   ctx.textAlign='center'; ctx.font='400 24px "Anton"'; ctx.fillStyle=GOA.green;
@@ -968,13 +968,13 @@ function drawSingleCard(){
   let shipTxt=shipping.toUpperCase();
   wrapText(shipTxt, colX[2]+colW/2, colTop+42, colW-8, 26);
   ctx.textAlign='left';
-  goaWaveLines(colX[2]+6, colTop+124, colW-12, 3, GOA.green, 0.5);
+  goaWaveLines(colX[2]+6, colTop+118, colW-12, 2, GOA.green, 0.5);
   ctx.textAlign='center'; ctx.font='800 12px "JetBrains Mono"'; ctx.fillStyle=GOA.deep;
-  ctx.fillText('BUILDER ID', colX[2]+colW/2, colTop+176);
+  ctx.fillText('BUILDER ID', colX[2]+colW/2, colTop+158);
   ctx.font='700 20px "JetBrains Mono"'; ctx.fillStyle=GOA.pink;
-  ctx.fillText(STATE.card.id, colX[2]+colW/2, colTop+204);
+  ctx.fillText(STATE.card.id, colX[2]+colW/2, colTop+186);
   ctx.textAlign='left';
-  drawBarcode(colX[2]+8, colTop+220, colW-16, 34, GOA.deep, STATE.card.setNo*7919);
+  drawBarcode(colX[2]+8, colTop+200, colW-16, 30, GOA.deep, STATE.card.setNo*7919);
 
   /* ---- footer: sea + ribbon ---- */
   const seaY=by+bh-96;
