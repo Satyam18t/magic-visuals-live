@@ -881,7 +881,7 @@ function drawSingleCard(){
   goaLeaf(bx+bw-36, by+bh*0.34, 1.1, Math.PI-0.5, hexA(GOA.leaf,0.5));
 
   /* ---- photo: arch-top frame with braided ring ---- */
-  const mcx=W/2, mcy=by+560, mr=164;
+  const mcx=W/2, mcy=by+572, mr=170;
   zigzagRing(mcx,mcy,mr+8,mr+26,44,GOA.yellow);
   ctx.beginPath(); ctx.arc(mcx,mcy,mr+8,0,Math.PI*2); ctx.strokeStyle=GOA.pink; ctx.lineWidth=5; ctx.stroke();
   ctx.save(); ctx.beginPath(); ctx.arc(mcx,mcy,mr,0,Math.PI*2); ctx.clip();
@@ -922,7 +922,7 @@ function drawSingleCard(){
   ctx.textAlign='left';
 
   /* ---- three-column credential block ---- */
-  const colTop=rpY+74, padX=bx+56, contentW=bw-112, colW=(contentW-56)/3;
+  const colTop=rpY+92, padX=bx+56, contentW=bw-112, colW=(contentW-56)/3;
   const colX=[padX, padX+colW+28, padX+(colW+28)*2];
   ctx.setLineDash([4,6]); ctx.lineWidth=1.6; ctx.strokeStyle=hexA(GOA.pink,0.5);
   [1,2].forEach(i=>{ ctx.beginPath(); ctx.moveTo(colX[i]-14, colTop-14); ctx.lineTo(colX[i]-14, colTop+236); ctx.stroke(); });
@@ -977,13 +977,13 @@ function drawSingleCard(){
   drawBarcode(colX[2]+8, colTop+182, colW-16, 26, GOA.deep, STATE.card.setNo*7919);
 
   /* ---- footer: sea + ribbon ---- */
-  const seaY=by+bh-56;
+  const seaY=by+bh-84;
   ctx.fillStyle=GOA.green;
   ctx.beginPath(); ctx.moveTo(bx,seaY+8);
   ctx.quadraticCurveTo(bx+bw*0.25,seaY-6,bx+bw*0.5,seaY+4);
   ctx.quadraticCurveTo(bx+bw*0.78,seaY+16,bx+bw,seaY+2);
   ctx.lineTo(bx+bw,by+bh); ctx.lineTo(bx,by+bh); ctx.closePath(); ctx.fill();
-  goaWaveLines(bx+40, seaY+30, bw-80, 2, hexA(GOA.cream,0.5), 0.5);
+  goaWaveLines(bx+40, seaY+46, bw-80, 2, hexA(GOA.cream,0.5), 0.5);
   palmSilhouette(bx+70, seaY+10, 0.5, hexA(GOA.cream,0.35));
   palmSilhouette(bx+bw-70, seaY+10, 0.5, hexA(GOA.cream,0.35));
   ctx.restore();
