@@ -708,193 +708,274 @@ function cardWallpaper(bx,by,bw,bh,color){
   }
   ctx.restore();
 }
-/* ---- SINGLE ID CARD — boarding-pass style ---- */
+/* =========================================================================
+   SINGLE ID CARD — original "Goa postcard credential" composition.
+   Cream surface, deep-green border, sun-yellow + magenta accents,
+   hand-drawn tropical illustrations + builder/tech marks.
+   ========================================================================= */
+const GOA = {
+  deep:'#0A3620', green:'#14603A', cream:'#FCF5E3', creamSoft:'#F3E8CC', sand:'#F0DFB4',
+  yellow:'#FFC629', yellowSoft:'#FFE293', pink:'#E8356D', pinkSoft:'#FF7FA6', leaf:'#1E7A46'
+};
+
+function goaSurfboard(cx, cy, len, rot, fill, stripe){
+  ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot);
+  const w=len*0.26;
+  ctx.beginPath();
+  ctx.moveTo(0,-len/2);
+  ctx.quadraticCurveTo(w/2,-len*0.12,w*0.42,len*0.28);
+  ctx.quadraticCurveTo(w*0.22,len/2,0,len/2);
+  ctx.quadraticCurveTo(-w*0.22,len/2,-w*0.42,len*0.28);
+  ctx.quadraticCurveTo(-w/2,-len*0.12,0,-len/2);
+  ctx.closePath();
+  ctx.fillStyle=fill; ctx.fill();
+  ctx.lineWidth=3; ctx.strokeStyle=GOA.deep; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,-len*0.36); ctx.lineTo(0,len*0.36);
+  ctx.strokeStyle=stripe; ctx.lineWidth=4; ctx.stroke();
+  ctx.restore();
+}
+function goaShack(x, baseY, sc){
+  ctx.save(); ctx.translate(x,baseY); ctx.scale(sc,sc);
+  ctx.fillStyle=GOA.pink; ctx.strokeStyle=GOA.deep; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.rect(-46,-70,92,70); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-58,-70); ctx.lineTo(0,-108); ctx.lineTo(58,-70); ctx.closePath();
+  ctx.fillStyle=GOA.green; ctx.fill(); ctx.stroke();
+  ctx.fillStyle=GOA.yellow; ctx.beginPath(); ctx.rect(-30,-52,24,24); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.rect(8,-52,26,52); ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+function goaScooter(x, baseY, sc){
+  ctx.save(); ctx.translate(x,baseY); ctx.scale(sc,sc);
+  ctx.strokeStyle=GOA.deep; ctx.lineWidth=3.4; ctx.fillStyle=GOA.pinkSoft;
+  [[-30,0],[30,0]].forEach(([wx])=>{ ctx.beginPath(); ctx.arc(wx,-14,14,0,Math.PI*2); ctx.fillStyle=GOA.cream; ctx.fill(); ctx.stroke(); });
+  ctx.beginPath(); ctx.moveTo(-30,-14); ctx.quadraticCurveTo(-16,-30,4,-30); ctx.lineTo(20,-46); ctx.lineTo(34,-46);
+  ctx.strokeStyle=GOA.pink; ctx.lineWidth=6; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-34,-30); ctx.quadraticCurveTo(-34,-46,-16,-44); ctx.lineTo(2,-44);
+  ctx.strokeStyle=GOA.deep; ctx.lineWidth=3; ctx.stroke();
+  ctx.restore();
+}
+function goaLeaf(x, y, sc, rot, color){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(rot); ctx.scale(sc,sc);
+  ctx.fillStyle=color;
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(34,-26,86,-6); ctx.quadraticCurveTo(38,16,0,0); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle=hexA(GOA.deep,0.35); ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(2,-1); ctx.quadraticCurveTo(42,-6,84,-6); ctx.stroke();
+  ctx.restore();
+}
+function goaBirds(x,y,sc,color){
+  ctx.save(); ctx.translate(x,y); ctx.scale(sc,sc); ctx.strokeStyle=color; ctx.lineWidth=2.4; ctx.lineCap='round';
+  [[0,0],[26,-14],[52,4]].forEach(([dx,dy])=>{
+    ctx.beginPath(); ctx.moveTo(dx-9,dy+5); ctx.quadraticCurveTo(dx,dy-4,dx+9,dy+5); ctx.stroke();
+  });
+  ctx.restore();
+}
+function goaWaveLines(x, y, w, rows, color, alpha){
+  ctx.save(); ctx.globalAlpha=alpha; ctx.strokeStyle=color; ctx.lineWidth=2.2;
+  for(let i=0;i<rows;i++){
+    const yy=y+i*9;
+    ctx.beginPath(); ctx.moveTo(x,yy);
+    for(let sx=0; sx<w; sx+=26){
+      ctx.quadraticCurveTo(x+sx+7, yy-5, x+sx+13, yy);
+      ctx.quadraticCurveTo(x+sx+19, yy+5, x+sx+26, yy);
+    }
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+/* GOA sticker wordmark used inside the card title */
+function goaWordSticker(cx, cy){
+  ctx.save(); ctx.translate(cx,cy); ctx.rotate(-0.05);
+  ctx.font='400 62px "Anton"';
+  const tw=ctx.measureText('GOA').width, pw=tw+42, ph=82;
+  ctx.fillStyle=hexA(GOA.deep,0.22); roundRectPath(-pw/2+6,-ph/2+7,pw,ph,14); ctx.fill();
+  roundRectPath(-pw/2,-ph/2,pw,ph,14); ctx.fillStyle=GOA.yellow; ctx.fill();
+  ctx.lineWidth=4; ctx.strokeStyle=GOA.deep; roundRectPath(-pw/2,-ph/2,pw,ph,14); ctx.stroke();
+  ctx.textAlign='center'; ctx.fillStyle=GOA.pink; ctx.fillText('GOA', 0, 22);
+  ctx.textAlign='left'; ctx.restore();
+  return tw+42;
+}
 function drawSingleCard(){
   ctx.clearRect(0,0,W,H);
   const r = STATE.card.tier, s = STATE.single;
 
-  /* outer dashed frame */
-  roundRectPath(0,0,W,H,40); ctx.fillStyle=CARD2.bgDeep; ctx.fill();
-  const bx=20, by=20, bw=W-40, bh=H-40;
-  roundRectPath(bx,by,bw,bh,32);
-  const bgGrad=ctx.createLinearGradient(0,by,0,by+bh);
-  bgGrad.addColorStop(0,'#0F5A34'); bgGrad.addColorStop(0.45,CARD2.bg); bgGrad.addColorStop(1,CARD2.bgDeep);
-  ctx.fillStyle=bgGrad; ctx.fill();
-  ctx.save(); roundRectPath(bx,by,bw,bh,32); ctx.clip();
-  cardWallpaper(bx,by,bw,bh,CARD2.pattern);
-  /* soft sunrise glow behind the header, matching brand */
-  const sunGlow=ctx.createRadialGradient(W/2,by+70,10,W/2,by+70,320);
-  sunGlow.addColorStop(0,hexA(CARD2.yellow,0.35)); sunGlow.addColorStop(1,hexA(CARD2.yellow,0));
-  ctx.fillStyle=sunGlow; ctx.fillRect(bx,by,bw,320);
-  /* dashed outer perforation, like a real ticket stub */
-  ctx.setLineDash([3,7]); ctx.lineWidth=2; ctx.strokeStyle=hexA(CARD2.cream,0.35);
-  roundRectPath(bx+14,by+14,bw-28,bh-28,26); ctx.stroke(); ctx.setLineDash([]);
+  /* ---- outer green shell + yellow keyline ---- */
+  roundRectPath(0,0,W,H,46); ctx.fillStyle=GOA.deep; ctx.fill();
+  ctx.lineWidth=3; ctx.strokeStyle=hexA(GOA.yellow,0.7);
+  roundRectPath(13,13,W-26,H-26,38); ctx.stroke();
 
-  /* lanyard tab */
-  roundRectPath(W/2-58,4,116,26,13); ctx.fillStyle=CARD2.bgDeep; ctx.fill();
-  ctx.beginPath(); ctx.arc(W/2,17,4,0,Math.PI*2); ctx.fillStyle=hexA(CARD2.cream,0.5); ctx.fill();
-
-  const padX=bx+50, contentW=bw-100;
-
-  /* header — sunrise-gradient rounded bar */
-  const hdrY=by+38, hdrH=112;
-  roundRectPath(padX, hdrY, contentW, hdrH, 18);
-  const hdrGrad=ctx.createLinearGradient(padX,hdrY,padX+contentW,hdrY+hdrH);
-  hdrGrad.addColorStop(0,CARD2.yellowSoft); hdrGrad.addColorStop(0.6,CARD2.yellow); hdrGrad.addColorStop(1,CARD2.sky);
-  ctx.fillStyle=hdrGrad; ctx.fill();
-  ctx.textAlign='left';
-  ctx.font='400 42px "Anton"'; ctx.fillStyle=CARD2.ink2;
-  ctx.fillText('HACKER HOUSE', padX+28, hdrY+52);
-  const hhWidth=ctx.measureText('HACKER HOUSE ').width;
-  ctx.font='400 30px "Anton"'; ctx.fillStyle=CARD2.pinkDeep;
-  ctx.fillText('GOA', padX+28+hhWidth, hdrY+52);
-  ctx.font='700 14px "JetBrains Mono"'; ctx.fillStyle=hexA(CARD2.ink2,0.85);
-  ctx.fillText('BUILDER PASS · 2026 · 28–31 OCT, GOA', padX+28, hdrY+82);
-  /* small sun + wave ornament tucked in header corner */
+  /* ---- cream postcard surface ---- */
+  const bx=27, by=27, bw=W-54, bh=H-54;
   ctx.save();
-  ctx.beginPath(); ctx.arc(padX+contentW-52, hdrY+30, 13, 0, Math.PI*2); ctx.fillStyle=hexA(CARD2.pinkDeep,0.28); ctx.fill();
-  ctx.strokeStyle=hexA(CARD2.ink2,0.4); ctx.lineWidth=2; ctx.beginPath();
-  ctx.moveTo(padX+contentW-78,hdrY+52); ctx.quadraticCurveTo(padX+contentW-64,hdrY+42,padX+contentW-50,hdrY+52);
-  ctx.quadraticCurveTo(padX+contentW-36,hdrY+62,padX+contentW-22,hdrY+52); ctx.stroke();
-  ctx.restore();
+  roundRectPath(bx,by,bw,bh,30); ctx.fillStyle=GOA.cream; ctx.fill(); ctx.clip();
 
-  /* corner VIP stamp with a holographic sweep */
-  ctx.save(); ctx.translate(bx+bw-92, hdrY+hdrH+50); ctx.rotate(0.18);
-  roundRectPath(-58,-24,116,48,8);
-  const holoGrad=ctx.createLinearGradient(-58,-24,58,24);
-  holoGrad.addColorStop(0,hexA(CARD2.pink,0.10)); holoGrad.addColorStop(0.5,hexA(CARD2.yellowSoft,0.22)); holoGrad.addColorStop(1,hexA(CARD2.pink,0.10));
-  ctx.fillStyle=holoGrad; ctx.fill();
-  ctx.setLineDash([5,4]); ctx.lineWidth=2.4; ctx.strokeStyle=CARD2.pink;
-  roundRectPath(-58,-24,116,48,8); ctx.stroke(); ctx.setLineDash([]);
-  ctx.textAlign='center'; ctx.font='800 15px "JetBrains Mono"'; ctx.fillStyle=CARD2.pink;
-  ctx.fillText('GOA 2026', 0,-3);
-  ctx.font='700 10px "JetBrains Mono"'; ctx.fillStyle=CARD2.cream; ctx.fillText('· VIP ·', 0,14);
-  ctx.restore();
-  ctx.textAlign='left';
+  /* paper texture + sun wash */
+  ctx.fillStyle=hexA(GOA.deep,0.05);
+  for(let gy=by+18; gy<by+bh; gy+=26){ for(let gx=bx+18; gx<bx+bw; gx+=26){ ctx.beginPath(); ctx.arc(gx,gy,1,0,Math.PI*2); ctx.fill(); } }
+  const wash=ctx.createRadialGradient(bx+bw*0.5,by+120,20,bx+bw*0.5,by+120,520);
+  wash.addColorStop(0,hexA(GOA.yellow,0.26)); wash.addColorStop(1,hexA(GOA.yellow,0));
+  ctx.fillStyle=wash; ctx.fillRect(bx,by,bw,620);
 
-  /* margin text */
-  verticalText('28 – 31 OCT 2026', bx+28, by+bh*0.58, hexA(CARD2.cream,0.4), '700 12px "JetBrains Mono"', 15, true);
-  verticalText('GOA, INDIA', bx+bw-28, by+bh*0.58, hexA(CARD2.pink,0.65), '700 12px "JetBrains Mono"', 15, true);
+  /* sand + sea band behind the lower half */
+  ctx.fillStyle=hexA(GOA.sand,0.85);
+  ctx.beginPath(); ctx.moveTo(bx,by+bh*0.62);
+  ctx.quadraticCurveTo(bx+bw*0.5,by+bh*0.58,bx+bw,by+bh*0.63);
+  ctx.lineTo(bx+bw,by+bh*0.70); ctx.lineTo(bx,by+bh*0.70); ctx.closePath(); ctx.fill();
 
-  /* photo */
-  const mcx=W/2, mcy=hdrY+hdrH+190, mr=176;
-  ctx.beginPath(); ctx.arc(mcx,mcy,mr+14,0,Math.PI*2); ctx.strokeStyle=CARD2.yellow; ctx.lineWidth=6; ctx.stroke();
-  ctx.beginPath(); ctx.arc(mcx,mcy,mr+5,0,Math.PI*2); ctx.strokeStyle=CARD2.pink; ctx.lineWidth=2.4; ctx.stroke();
-  ctx.save(); ctx.beginPath(); ctx.arc(mcx,mcy,mr,0,Math.PI*2); ctx.clip();
-  ctx.fillStyle='#0B4A2C'; ctx.fillRect(mcx-mr,mcy-mr,mr*2,mr*2);
-  if(s.photo && s.photo.img){
-    drawImageInFrame(mcx, mcy, mr*2, s.photo);
-  } else { ctx.fillStyle=hexA(CARD2.cream,0.4); ctx.font='500 18px "Space Grotesk"'; ctx.textAlign='center'; ctx.fillText('upload a photo', mcx, mcy+6); ctx.textAlign='left'; }
-  ctx.restore();
-  /* tier badge — holographic sticker seal, overlapping photo */
-  const badgeX=mcx+mr*0.66, badgeY=mcy+mr*0.66, badgeR=54;
-  const holoBadge=ctx.createLinearGradient(badgeX-badgeR,badgeY-badgeR,badgeX+badgeR,badgeY+badgeR);
-  holoBadge.addColorStop(0,CARD2.pinkDeep); holoBadge.addColorStop(0.45,CARD2.pink); holoBadge.addColorStop(0.75,CARD2.yellowSoft); holoBadge.addColorStop(1,CARD2.pink);
-  ctx.beginPath(); ctx.arc(badgeX,badgeY,badgeR,0,Math.PI*2); ctx.fillStyle=holoBadge; ctx.fill();
-  ctx.save(); ctx.beginPath(); ctx.arc(badgeX,badgeY,badgeR,0,Math.PI*2); ctx.clip();
-  ctx.strokeStyle=hexA(CARD2.cream,0.35); ctx.lineWidth=6;
-  for(let i=-2;i<=2;i++){ ctx.beginPath(); ctx.moveTo(badgeX-badgeR+i*22,badgeY-badgeR); ctx.lineTo(badgeX+badgeR+i*22,badgeY+badgeR); ctx.stroke(); }
-  ctx.restore();
-  ctx.lineWidth=4; ctx.strokeStyle=CARD2.bg; ctx.beginPath(); ctx.arc(badgeX,badgeY,badgeR,0,Math.PI*2); ctx.stroke();
-  ctx.setLineDash([1.5,3.5]); ctx.lineWidth=1.4; ctx.strokeStyle=hexA(CARD2.cream,0.55);
-  ctx.beginPath(); ctx.arc(badgeX,badgeY,badgeR-7,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
-  ctx.textAlign='center'; ctx.fillStyle=CARD2.cream;
-  ctx.font='800 11px "JetBrains Mono"'; ctx.fillText('BUILDER', badgeX, badgeY-5);
-  ctx.font='400 18px "Anton"'; ctx.fillText(r.key.toUpperCase(), badgeX, badgeY+18);
-  ctx.textAlign='left';
+  /* ---- top-left Goa postage stamp / top-right paradise seal ---- */
+  postageStamp(bx+108, by+120, 132, 158, -0.06);
+  sealBadge(bx+bw-112, by+118, 74);
+  goaBirds(bx+bw*0.30, by+92, 1, hexA(GOA.deep,0.55));
+  star(bx+bw*0.70, by+176, 9, GOA.pink, 0.8);
+  star(bx+bw*0.26, by+196, 7, GOA.yellow, 0.95);
 
-  /* name + role pill */
-  const nameY=mcy+mr+92;
+  /* ---- lanyard plaque ---- */
+  roundRectPath(W/2-96, 6, 192, 96, 18); ctx.fillStyle=GOA.pink; ctx.fill();
+  ctx.lineWidth=3.4; ctx.strokeStyle=GOA.deep; roundRectPath(W/2-96, 6, 192, 96, 18); ctx.stroke();
   ctx.textAlign='center';
-  let fs=54; ctx.font=`400 ${fs}px "Anton"`;
-  const nameStr=(s.name||'YOUR NAME').toUpperCase();
-  while(ctx.measureText(nameStr).width>contentW-40 && fs>26){ fs-=2; ctx.font=`400 ${fs}px "Anton"`; }
-  ctx.fillStyle=CARD2.cream; ctx.fillText(nameStr, W/2, nameY);
-
-  const roleText = (s.role || (s.stacks[0]||'Builder')).toUpperCase();
-  ctx.font='800 15px "JetBrains Mono"'; const rpw=ctx.measureText(roleText).width+52;
-  const rpY=nameY+30;
-  roundRectPath(W/2-rpw/2,rpY,rpw,42,21); ctx.fillStyle=CARD2.pink; ctx.fill();
-  ctx.fillStyle=CARD2.cream; ctx.fillText(roleText, W/2, rpY+28);
+  ctx.font='400 36px "Anton"'; ctx.fillStyle=GOA.yellow; ctx.fillText('HH GOA', W/2, 56);
+  ctx.font='700 15px "JetBrains Mono"'; ctx.fillStyle=GOA.cream; ctx.fillText('2026', W/2, 82);
   ctx.textAlign='left';
 
-  /* details grid — only rows with real content, so nothing looks empty */
-  const rows=[{label:'ROLE & LOCATION', value:(s.role||'Builder')+' · '+(s.location||'Goa, India')}];
-  if(s.twitter) rows.push({label:'TWITTER / X', value:s.twitter});
-  if(s.linkedin) rows.push({label:'LINKEDIN', value:s.linkedin});
-  if(s.github) rows.push({label:'GITHUB', value:s.github});
-  if(s.instagram) rows.push({label:'INSTAGRAM', value:s.instagram});
-  if(s.portfolio) rows.push({label:'PORTFOLIO', value:s.portfolio});
-  if(s.email) rows.push({label:'EMAIL', value:s.email});
-  if(rows.length<3) rows.push({label:'BUILDER CLASS', value: s.stacks.length? s.stacks.join(' · '):'General Builder'});
-  const gridRows=rows.slice(0,7);
+  /* ---- headline: HACKER [GOA] HOUSE ---- */
+  const titleY=by+300;
+  ctx.font='400 84px "Anton"';
+  const w1=ctx.measureText('HACKER').width, w3=ctx.measureText('HOUSE').width;
+  ctx.font='400 62px "Anton"';
+  const stickerW=ctx.measureText('GOA').width+42;
+  const gapT=22, totalW=w1+w3+stickerW+gapT*2;
+  let tx=W/2-totalW/2;
+  ctx.font='400 84px "Anton"'; ctx.fillStyle=GOA.deep; ctx.textAlign='left';
+  ctx.fillText('HACKER', tx, titleY); tx+=w1+gapT;
+  goaWordSticker(tx+stickerW/2, titleY-26); tx+=stickerW+gapT;
+  ctx.fillStyle=GOA.green; ctx.fillText('HOUSE', tx, titleY);
+  ctx.textAlign='center'; ctx.font='700 14px "JetBrains Mono"'; ctx.fillStyle=hexA(GOA.deep,0.6);
+  ctx.fillText('BUILDER PASS  ·  28–31 OCT 2026  ·  PANHOUSE, GOA', W/2, titleY+38);
+  ctx.textAlign='left';
 
-  let gy=rpY+80; const rowH=78, colW=(contentW-18)/2, gap=18;
-  ctx.font='400 15px "Space Grotesk"';
-  for(let i=0;i<gridRows.length;i+=2){
-    const pair=[gridRows[i], gridRows[i+1]];
-    pair.forEach((rw,j)=>{
-      if(!rw) return;
-      const cx0=padX+j*(colW+gap);
-      roundRectPath(cx0,gy,colW,rowH-14,12); ctx.fillStyle=CARD2.panel; ctx.fill();
-      ctx.strokeStyle=CARD2.panelLine; ctx.lineWidth=1.2; roundRectPath(cx0,gy,colW,rowH-14,12); ctx.stroke();
-      ctx.font='700 11px "JetBrains Mono"'; ctx.fillStyle=CARD2.pink;
-      ctx.fillText(rw.label, cx0+18, gy+26);
-      let val=rw.value, fsz=17; ctx.font=`500 ${fsz}px "Space Grotesk"`; ctx.fillStyle=CARD2.cream;
-      while(ctx.measureText(val).width>colW-36 && val.length>4){ val=val.slice(0,-1); }
-      if(val!==rw.value) val=val.slice(0,-1)+'…';
-      ctx.fillText(val, cx0+18, gy+50);
-    });
-    gy+=rowH;
-  }
+  /* ---- margin metadata ---- */
+  verticalText('28 – 31 OCT 2026', bx+34, by+bh*0.46, hexA(GOA.pink,0.85), '700 13px "JetBrains Mono"', 16, true);
+  verticalText('GOA, INDIA', bx+bw-34, by+bh*0.46, hexA(GOA.deep,0.6), '700 13px "JetBrains Mono"', 16, true);
 
-  /* footer position is fixed; fill any leftover space above it so the
-     card never reads as empty, whether 1 or 7 detail rows were drawn */
-  const ftY=by+bh-118;
-  const leftover = ftY-30-gy;
-  if(leftover>150){
-    const smY=gy+8, smH=Math.min(140, leftover-40);
-    roundRectPath(padX, smY, contentW, smH, 14); ctx.fillStyle=CARD2.panel; ctx.fill();
-    ctx.strokeStyle=CARD2.panelLine; ctx.lineWidth=1.2; roundRectPath(padX, smY, contentW, smH, 14); ctx.stroke();
-    ctx.font='700 12px "JetBrains Mono"'; ctx.fillStyle=CARD2.pink; ctx.textAlign='left';
-    ctx.fillText('SIGNATURE MOVE', padX+22, smY+30);
-    ctx.font='400 25px "Anton"'; ctx.fillStyle=CARD2.yellow;
-    ctx.fillText(STATE.card.abilityName, padX+22, smY+64);
-    ctx.font='400 15px "Space Grotesk"'; ctx.fillStyle=hexA(CARD2.cream,0.75);
-    wrapText(STATE.card.abilityText, padX+22, smY+90, contentW-44, 20);
-    if(smH>110){
-      ctx.font='700 11px "JetBrains Mono"'; ctx.fillStyle=CARD2.pink;
-      ctx.fillText('TOOLKIT', padX+22, smY+smH-18);
-      ctx.font='500 13px "Space Grotesk"'; ctx.fillStyle=hexA(CARD2.cream,0.85);
-      ctx.fillText(STATE.card.toolkit.join('   ·   '), padX+150, smY+smH-18);
-    }
-  }
-  ctx.save();
-  ctx.strokeStyle=hexA(CARD2.cream,0.14); ctx.lineWidth=2; ctx.beginPath();
-  const waveY=ftY-38;
-  ctx.moveTo(padX,waveY);
-  ctx.bezierCurveTo(padX+contentW*0.25,waveY-16,padX+contentW*0.35,waveY+16,padX+contentW*0.5,waveY);
-  ctx.bezierCurveTo(padX+contentW*0.65,waveY-16,padX+contentW*0.75,waveY+16,padX+contentW,waveY);
-  ctx.stroke(); ctx.restore();
-  palmSilhouette(padX+10, by+bh-176, 0.65, hexA(CARD2.ink2,0.7));
-  palmSilhouette(bx+bw-50-10, by+bh-176, 0.65, hexA(CARD2.ink2,0.7));
+  /* ---- side illustrations ---- */
+  goaSurfboard(bx+86, by+bh*0.50, 250, 0.16, GOA.pinkSoft, GOA.cream);
+  goaSurfboard(bx+150, by+bh*0.52, 220, -0.12, GOA.yellow, GOA.deep);
+  palmSilhouette(bx+108, by+bh*0.62, 1.25, hexA(GOA.leaf,0.9));
+  goaLeaf(bx+40, by+bh*0.40, 1, 0.5, hexA(GOA.leaf,0.5));
+  goaShack(bx+bw-116, by+bh*0.62, 0.95);
+  goaScooter(bx+bw-108, by+bh*0.66, 0.95);
+  palmSilhouette(bx+bw-52, by+bh*0.58, 1.1, hexA(GOA.leaf,0.85));
+  goaLeaf(bx+bw-36, by+bh*0.34, 1.1, Math.PI-0.5, hexA(GOA.leaf,0.5));
 
-  /* footer */
-  ctx.strokeStyle=hexA(CARD2.cream,0.18); ctx.lineWidth=1.2;
-  ctx.beginPath(); ctx.moveTo(padX, ftY); ctx.lineTo(padX+contentW, ftY); ctx.stroke();
-  if(qrCanvas){
-    roundRectPath(padX, ftY+18, 80, 80, 10); ctx.fillStyle=CARD2.cream; ctx.fill();
-    ctx.drawImage(qrCanvas, padX+8, ftY+26, 64, 64);
-  }
-  const bcX=padX+104, bcW=contentW-104;
-  ctx.textAlign='left'; ctx.font='700 16px "JetBrains Mono"'; ctx.fillStyle=CARD2.cream;
-  ctx.fillText('PASS ID  '+STATE.card.id, bcX, ftY+38);
-  ctx.font='400 11px "JetBrains Mono"'; ctx.fillStyle=hexA(CARD2.cream,0.55);
-  ctx.fillText('SET 01 · NO. '+String(STATE.card.setNo).padStart(4,'0')+' / 0500', bcX, ftY+56);
-  drawBarcode(bcX, ftY+66, bcW, 26, CARD2.cream, STATE.card.setNo*7919);
+  /* ---- photo: arch-top frame with braided ring ---- */
+  const mcx=W/2, mcy=by+600, mr=186;
+  zigzagRing(mcx,mcy,mr+8,mr+26,44,GOA.yellow);
+  ctx.beginPath(); ctx.arc(mcx,mcy,mr+8,0,Math.PI*2); ctx.strokeStyle=GOA.pink; ctx.lineWidth=5; ctx.stroke();
+  ctx.save(); ctx.beginPath(); ctx.arc(mcx,mcy,mr,0,Math.PI*2); ctx.clip();
+  ctx.fillStyle=GOA.creamSoft; ctx.fillRect(mcx-mr,mcy-mr,mr*2,mr*2);
+  if(s.photo && s.photo.img){ drawImageInFrame(mcx, mcy, mr*2, s.photo); }
+  else { ctx.fillStyle=hexA(GOA.deep,0.45); ctx.font='500 18px "Space Grotesk"'; ctx.textAlign='center'; ctx.fillText('upload a photo', mcx, mcy+6); ctx.textAlign='left'; }
   ctx.restore();
-  drawRibbon(W/2, H-58, '#FRAMEINGOA', CARD2.pink, CARD2.cream);
+  ctx.beginPath(); ctx.arc(mcx,mcy,mr,0,Math.PI*2); ctx.strokeStyle=GOA.deep; ctx.lineWidth=4; ctx.stroke();
+  /* let's build sticky note tucked beside the portrait */
+  stickyNote(mcx+mr+62, mcy-mr*0.62, 128, 84, 0.16, "LET'S\nBUILD!");
+  /* tier chip on the other side */
+  ctx.save(); ctx.translate(mcx-mr-64, mcy+mr*0.34); ctx.rotate(-0.14);
+  roundRectPath(-70,-26,140,52,12); ctx.fillStyle=GOA.green; ctx.fill();
+  ctx.lineWidth=3; ctx.strokeStyle=GOA.deep; roundRectPath(-70,-26,140,52,12); ctx.stroke();
+  ctx.textAlign='center'; ctx.font='400 24px "Anton"'; ctx.fillStyle=GOA.yellow;
+  ctx.fillText(r.key.toUpperCase(), 0, 9); ctx.textAlign='left'; ctx.restore();
+
+  /* ---- name plaque ---- */
+  const nameY=mcy+mr+94;
+  roundRectPath(bx+90, nameY-52, bw-180, 92, 20); ctx.fillStyle=GOA.green; ctx.fill();
+  ctx.lineWidth=3.6; ctx.strokeStyle=GOA.deep; roundRectPath(bx+90, nameY-52, bw-180, 92, 20); ctx.stroke();
+  ctx.textAlign='center';
+  let fs=52; ctx.font=`400 ${fs}px "Anton"`;
+  const nameStr=(s.name||'YOUR NAME').toUpperCase();
+  while(ctx.measureText(nameStr).width>bw-260 && fs>24){ fs-=2; ctx.font=`400 ${fs}px "Anton"`; }
+  ctx.fillStyle=GOA.cream; ctx.fillText(nameStr, W/2, nameY+10);
+  star(bx+128, nameY-6, 8, GOA.yellow, 0.9); star(bx+bw-128, nameY-6, 8, GOA.yellow, 0.9);
+
+  /* ---- role pill ---- */
+  const roleText = (s.role || (s.stacks[0]||'Builder')).toUpperCase();
+  ctx.font='800 17px "JetBrains Mono"';
+  const rpw=Math.min(bw-220, ctx.measureText(roleText).width+96), rpY=nameY+58;
+  roundRectPath(W/2-rpw/2, rpY, rpw, 52, 26); ctx.fillStyle=GOA.yellow; ctx.fill();
+  ctx.lineWidth=3; ctx.strokeStyle=GOA.deep; roundRectPath(W/2-rpw/2, rpY, rpw, 52, 26); ctx.stroke();
+  ctx.fillStyle=GOA.pink; ctx.fillText(roleText, W/2, rpY+34);
+  ctx.font='700 18px "JetBrains Mono"'; ctx.fillStyle=GOA.deep;
+  ctx.fillText('⚡', W/2-rpw/2+26, rpY+34); ctx.fillText('⚡', W/2+rpw/2-26, rpY+34);
+  ctx.textAlign='left';
+
+  /* ---- three-column credential block ---- */
+  const colTop=rpY+96, padX=bx+56, contentW=bw-112, colW=(contentW-56)/3;
+  const colX=[padX, padX+colW+28, padX+(colW+28)*2];
+  ctx.setLineDash([4,6]); ctx.lineWidth=1.6; ctx.strokeStyle=hexA(GOA.pink,0.5);
+  [1,2].forEach(i=>{ ctx.beginPath(); ctx.moveTo(colX[i]-14, colTop-14); ctx.lineTo(colX[i]-14, colTop+250); ctx.stroke(); });
+  ctx.setLineDash([]);
+  const colHead=(x,label)=>{
+    ctx.textAlign='center'; ctx.font='800 13px "JetBrains Mono"'; ctx.fillStyle=GOA.deep;
+    ctx.fillText(label, x+colW/2, colTop+4);
+    star(x+10, colTop-2, 5, GOA.pink, 0.9); star(x+colW-10, colTop-2, 5, GOA.pink, 0.9);
+    ctx.textAlign='left';
+  };
+  /* col 1 — builder class + QR */
+  colHead(colX[0], 'BUILDER CLASS');
+  ctx.textAlign='center'; ctx.font='400 27px "Anton"'; ctx.fillStyle=GOA.pink;
+  ctx.fillText(STATE.card.abilityName.toUpperCase(), colX[0]+colW/2, colTop+44);
+  ctx.textAlign='left';
+  if(qrCanvas){
+    const qs=112, qx=colX[0]+colW/2-qs/2, qy=colTop+72;
+    roundRectPath(qx-8,qy-8,qs+16,qs+16,10); ctx.fillStyle=GOA.cream; ctx.fill();
+    ctx.lineWidth=2.4; ctx.strokeStyle=hexA(GOA.deep,0.4); roundRectPath(qx-8,qy-8,qs+16,qs+16,10); ctx.stroke();
+    ctx.drawImage(qrCanvas, qx, qy, qs, qs);
+    ctx.font='700 10px "JetBrains Mono"'; ctx.fillStyle=hexA(GOA.deep,0.6); ctx.textAlign='center';
+    ctx.fillText('SCAN TO VERIFY', colX[0]+colW/2, qy+qs+22); ctx.textAlign='left';
+  }
+  /* col 2 — beach bag / toolkit */
+  colHead(colX[1], 'BEACH BAG');
+  const icons=['{ }','▤','♪','☕','◉'];
+  STATE.card.toolkit.slice(0,3).forEach((tItem,i)=>{
+    const iy=colTop+50+i*54;
+    roundRectPath(colX[1]+6, iy-24, 40, 40, 10); ctx.fillStyle=GOA.green; ctx.fill();
+    ctx.font='700 15px "JetBrains Mono"'; ctx.fillStyle=GOA.yellow; ctx.textAlign='center';
+    ctx.fillText(icons[i%icons.length], colX[1]+26, iy+2);
+    ctx.textAlign='left'; ctx.font='700 14px "JetBrains Mono"'; ctx.fillStyle=GOA.deep;
+    let lbl=tItem.toUpperCase();
+    while(ctx.measureText(lbl).width>colW-64 && lbl.length>4) lbl=lbl.slice(0,-1);
+    ctx.fillText(lbl, colX[1]+58, iy+2);
+  });
+  goaWaveLines(colX[1]+6, colTop+228, colW-12, 2, GOA.pink, 0.45);
+  /* col 3 — currently shipping + builder ID + barcode */
+  colHead(colX[2], 'CURRENTLY SHIPPING');
+  ctx.textAlign='center'; ctx.font='400 24px "Anton"'; ctx.fillStyle=GOA.green;
+  const shipping = (s.building || STATE.card.abilityText || 'Building the future');
+  ctx.font='400 22px "Anton"';
+  let shipTxt=shipping.toUpperCase();
+  wrapText(shipTxt, colX[2]+colW/2, colTop+42, colW-8, 26);
+  ctx.textAlign='left';
+  goaWaveLines(colX[2]+6, colTop+124, colW-12, 3, GOA.green, 0.5);
+  ctx.textAlign='center'; ctx.font='800 12px "JetBrains Mono"'; ctx.fillStyle=GOA.deep;
+  ctx.fillText('BUILDER ID', colX[2]+colW/2, colTop+176);
+  ctx.font='700 20px "JetBrains Mono"'; ctx.fillStyle=GOA.pink;
+  ctx.fillText(STATE.card.id, colX[2]+colW/2, colTop+204);
+  ctx.textAlign='left';
+  drawBarcode(colX[2]+8, colTop+220, colW-16, 34, GOA.deep, STATE.card.setNo*7919);
+
+  /* ---- footer: sea + ribbon ---- */
+  const seaY=by+bh-96;
+  ctx.fillStyle=GOA.green;
+  ctx.beginPath(); ctx.moveTo(bx,seaY+14);
+  ctx.quadraticCurveTo(bx+bw*0.25,seaY-14,bx+bw*0.5,seaY+6);
+  ctx.quadraticCurveTo(bx+bw*0.78,seaY+26,bx+bw,seaY-2);
+  ctx.lineTo(bx+bw,by+bh); ctx.lineTo(bx,by+bh); ctx.closePath(); ctx.fill();
+  goaWaveLines(bx+40, seaY+52, bw-80, 2, hexA(GOA.cream,0.5), 0.5);
+  palmSilhouette(bx+70, seaY+18, 0.6, hexA(GOA.cream,0.35));
+  palmSilhouette(bx+bw-70, seaY+18, 0.6, hexA(GOA.cream,0.35));
+  ctx.restore();
+  drawRibbon(W/2, H-92, '#FRAMEINGOA', GOA.pink, GOA.cream);
 }
+
 
 /* ---- SQUAD CARD ---- */
 function drawSquadCard(){
